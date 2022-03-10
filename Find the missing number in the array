@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    int ans=n;
+    for(int i=1;i<n;i++){
+        int x;
+        cin>>x;
+        ans=ans^i;
+        ans=ans^x;
+    }
+    cout<<ans<<endl;
+	return 0;
+}
+
+
+input:
+8
+5 7 1 2 8 4 3
+output: 6
+
+
+Explanation
+In the above code if we do XOR from 1 to n and given inputs then we will get the misssing numbers
+as we know XOR of two same numbers is 0
+1 XOR 1  = 2 XOR 2 = 3 XOR 3 = k XOR k ....... n XOR n = 0
+so if any no is missing the we will end up getting that no as results of all XOR operations
+for n=4
+inputs 1 2 4
+1^4^1^2^3^2^4=3
+Most efficient approach
+
+
+Another approach
+ans= sum of all numbers from 1 to n - sum of all inputs numbers given
