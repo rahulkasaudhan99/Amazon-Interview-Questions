@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+bool twoSum(vector<int> &arr,int target){
+    unordered_map<int,int> map;
+    for(int i=0;i<arr.size();i++){
+        if(map.find(target-arr[i])!=map.end()){
+            cout<<i<<" "<<map[target-arr[i]]<<endl;
+            return true;
+        }
+        map[arr[i]]=i;
+    }
+    return false;
+}
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    int target;
+    for(int i=0;i<n;i++) cin>>arr[i];
+    cin>>target;
+    cout<<twoSum(arr,target)<<endl;
+	return 0;
+}
+
+Complexity
+O(n) space
+O(n) time
+
+input:
+7
+5 7 1 2 8 4 3
+10
+output:
+4 3
+true
+
+input:
+7
+5 7 1 2 8 4 3
+19
+output:
+false
+
+Approach:
+Scan the whole array once and store visited elements in a hash set.
+During scan, for every element e in the array, we check if val - e is present in the hash set i.e. val - e is already visited.
+If val - e is found in the hash set, it means there is a pair (e, val - e) in array whose sum is equal to the given val.
+If we have exhausted all elements in the array and didn’t find any such pair, the function will return false
