@@ -20,6 +20,9 @@ input:
 5 7 1 2 8 4 3
 output: 6
 
+Complexity Analysis
+O(1) space 
+O(n) time
 
 Explanation
 In the above code if we do XOR from 1 to n and given inputs then we will get the misssing numbers
