@@ -1,0 +1,90 @@
+//Given a binary tree and a key, insert the key into the binary tree at the first position available in level order.
+#include <bits/stdc++.h>
+using namespace std;
+
+class binTree{
+    public:
+    
+    int val;
+    binTree* left;
+    binTree* right;
+    public:
+    binTree(){
+        this->val=0;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    binTree(int v){
+        this->val=v;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    //function to insert element in first vacant position in last level
+    binTree* insert(binTree* root,int v){
+        if(!root) return new binTree(v);
+        queue<binTree*> q;
+        q.push(root);
+        while(!q.empty()){
+            binTree *node=q.front();
+            q.pop();
+            
+            if(node->left) q.push(node->left);
+            else{
+                node->left=new binTree(v);
+                return root;
+            }
+            
+            if(node->right) q.push(node->right);
+            else{
+                node->right=new binTree(v);
+                return root;
+            }
+        }
+        return root;
+    }
+    //function for level order traversal
+    void levelOrder(binTree* root){
+        if(!root) return;
+        queue<binTree*> q;
+        q.push(root);
+        int size=1;
+        while(!q.empty()){
+            int s=size;
+            for(int i=0;i<s;i++){
+                binTree *node=q.front();
+                cout<<node->val<<" ";
+                q.pop();
+                size--;
+                if(node->left) q.push(node->left),size++;
+                if(node->right) q.push(node->right),size++;
+            }
+            cout<<endl;
+        }
+    }
+};
+
+
+int main() {
+    binTree t;
+    int n;
+    cin>>n;
+    binTree *root;
+    for(int i=0;i<n;i++) {
+        int z;
+        cin>>z;
+        root=t.insert(root,z);
+    }
+    t.levelOrder(root);
+	return 0;
+}
+
+
+
+input:
+7
+10 11 9 7 12 15 8
+
+output:
+10 
+11 9 
+7 12 15 8 
