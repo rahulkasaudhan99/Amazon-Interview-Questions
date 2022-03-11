@@ -1,0 +1,107 @@
+/*
+You are given a linked list where the node has two pointers. The first is the regular next pointer. 
+The second pointer is called arbitrary_pointer and it can point to any node in the linked list. 
+Your job is to write code to make a deep copy of the given linked list. 
+Here, deep copy means that any operations on the original list should not affect the copied list.
+Basically make a new list exactly same as given original list  which have also one extra pointer in each node random pointer pointing to any random node in list.
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class List{
+    int data;
+    public:
+    List *next;
+    List *random;
+    
+    List(){
+        this->data=0;
+        this->next=NULL;
+        this->random=NULL;
+    }
+    List(int d){
+        this->data=d;
+        this->next=NULL;
+        this->random=NULL;
+    }
+    List* pushBack(List* head,int d,List *randm=NULL){
+        if(head==NULL) return new List(d);
+        List* ptr=head;
+        while(ptr->next) ptr=ptr->next;
+        ptr->next=new List(d);
+        return head;
+    }
+    List* cloneList(List* head){
+        if(!head) return head;
+        List* original=head;
+        List* clone=NULL;
+        map<List*,List*> mp;
+        while(original){
+            List *node=new List(original->data);
+            mp[original]=node;
+            original=original->next;
+        }
+        original=head;
+        while(original){
+            List *curr=mp[original];
+            curr->next=mp[original->next];
+            curr->random=mp[original->random];
+            original=original->next;
+        }
+        clone=mp[head];
+        return clone;
+    }
+    void printList(List *head){
+        List *ptr=head;
+        while(ptr){
+            cout<<"data : "<<ptr->data<<" ";
+            ptr->random? cout<<"Random data : "<<ptr->random->data : cout<<"Random data : "<<-1;
+            cout<<endl;
+            ptr=ptr->next;
+        }
+        cout<<endl;
+    }
+};
+
+int main() {
+    List mylist;
+    List *head=NULL;
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int z;
+        cin>>z;
+        head=mylist.pushBack(head,z);
+    }
+    //filling random pointers
+    head->random = head->next->next; //random ptr for 1st node is 3rd
+    head->next->random = head->next->next->next;  //random ptr for 2nd node is 4th
+    head->next->next->random = head->next->next->next->next; //random ptr for 3rd node is 5th
+    head->next->next->next->random =  head->next->next->next->next->next; 
+    //random ptr for 4th node is NULL
+    head->next->next->next->next->random = head->next; //random ptr for 5th node is 2nd
+    mylist.printList(head);
+    List *clone=mylist.cloneList(head);
+    mylist.printList(clone);
+	return 0;
+}
+
+
+input:
+5
+1 2 3 4 5
+
+output:
+data : 1 Random data : 3
+data : 2 Random data : 4
+data : 3 Random data : 5
+data : 4 Random data : -1
+data : 5 Random data : 2
+
+data : 1 Random data : 3
+data : 2 Random data : 4
+data : 3 Random data : 5
+data : 4 Random data : -1
+data : 5 Random data : 2
+
