@@ -1,4 +1,5 @@
 //Using the concept of dp by using hashmap to not compute again same substring just storing s.substring= True (can be broken) s.substring=False(can't be broken)
+//2D array or 1D array can also be used for more optimization in DP
 
 #include <bits/stdc++.h>
 using namespace std;
