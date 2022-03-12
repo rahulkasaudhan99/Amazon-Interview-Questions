@@ -1,0 +1,58 @@
+//Using the concept of dp by using hashmap to not compute again same substring just storing s.substring= True (can be broken) s.substring=False(can't be broken)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+unordered_map<string,bool> hashmap;
+bool wordBreak(string s,unordered_map<string,bool> &dict){
+    //base case - whole string is present in dict
+    if(dict.find(s)!=dict.end()) return true;
+    //checking if already computed (DP)
+    if(hashmap.find(s)!=hashmap.end()) return true;
+    for(int i=1;i<=s.length();i++){
+        string left=s.substr(0,i);
+        if(dict.find(left)!=dict.end() && wordBreak(s.substr(i),dict)){
+            hashmap[s]=true;
+            return true;
+        }
+    }
+    hashmap[s]=false;
+    return false;
+}
+
+int main() {
+    int n;
+    string s;
+    cin>>s;
+    cin>>n;
+    unordered_map<string,bool> dict(n);
+    for(int i=0;i<n;i++){
+        string str;
+        cin>>str;
+        dict[str]=true;
+    }
+    bool ans=wordBreak(s,dict);
+    if(ans) cout<<"True"<<endl;
+    else cout<<"False"<<endl;
+	return 0;
+}
+
+
+
+
+input:
+applepeer
+3
+apple
+pear
+pie
+
+output - False
+
+applepie
+3
+apple
+pear
+pie
+
+output True
