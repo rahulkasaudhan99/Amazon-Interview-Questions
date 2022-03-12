@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+class bst{
+    int data;
+    public:
+    bst *left;
+    bst *right;
+    bst(){
+        this->data=0;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    bst(int d){
+        this->data=d;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    bool checkBst(bst *root){
+        if(!root) return true;
+        if(root->left && root->left->data>root->data) return false;
+        if(root->right && root->right->data<root->data) return false;
+        bool x=checkBst(root->left);
+        bool y=checkBst(root->right);
+        return x&y;
+    }
+    
+};
+int main() {
+    bst tree;
+    bst *root=new bst(100);
+    root->left=new bst(50);
+    root->right=new bst(200);
+    root->left->left=new bst(25);
+    root->left->right=new bst(75);
+    root->right->left=new bst(125);
+    root->right->right=new bst(350);
+    bool ans=tree.checkBst(root);
+    if(ans) cout<<"true"<<endl;
+    else cout<<"false"<<endl;
+
+	return 0;
+}
+
+output: true
