@@ -1,0 +1,83 @@
+//In this problem i have tried memoization approach which does not worked because for amt=5 it was counting 1 1 1 2 and 1 2 1 1 and 1 1 2 1 as different 
+//so we need to handle these situations as well
+//In order to handle these cases we need to not go back in coins array bcoz first element will explore all its possible combinations
+//We have two choices either take this element and reduce amount as many as possible + don't take current element and explore for remaining element 
+//see in recursive approach
+
+Time Complexity will be
+no of coins in array (len(coins))^ max levels
+max level=amount/(min val of coin)     i.e first coin in ascending sorted coins arr
+For Ex-
+coins = 1 2 5
+amt=5
+max level=5/1 = 5
+Time: O(3^5)
+
+
+DP Memoization Top Down
+//There are OVERLAPPING SUB-PROBLEMS in recursive approach and has OPTIMAL SUB-STRUCTURE so we used "2D array to memoize subproblems"
+
+Complexity:
+Time : amount*n    (n=len(coins))
+Space : amount*n     for DP array
+
+int noOfWays(int i,int &n,int amount,vector<int> &coins,vector<vector<int>> &dp){
+    //base case
+    if(amount<0) return 0;
+    if(i==n) return 0;
+    if(amount==0) return dp[amount][i]=1;
+    //if already computed
+    if(dp[amount][i]!=-1) return dp[amount][i];
+    //recursive case
+    //case 1:add and continue with same coin
+    //case 2:remove curr coin and move with next
+    return dp[amount][i]=noOfWays(i,n,amount-coins[i],coins,dp)+noOfWays(i+1,n,amount,coins,dp);
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> coins(n);
+    for(int i=0;i<n;i++) cin>>coins[i];
+    int amount;
+    cin>>amount;
+    int ans;
+    vector<vector<int>> dp(amount+1,vector<int>(n,-1));
+    ans=noOfWays(0,n,amount,coins,dp);
+    cout<<ans<<endl;
+	return 0;
+}
+
+
+DP Tabulation
+
+
+
+
+
+Recursive Approach:
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int noOfWays(int i,int amount,vector<int> &coins){
+    //base case
+    if(amount<0) return 0;
+    if(amount==0) return 1;
+    if(amount>0 && i>=coins.size()) return 0;
+    //recursive case
+    return noOfWays(i+1,amount,coins)+noOfWays(i,amount-coins[i],coins); 
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> coins(n);
+    for(int i=0;i<n;i++) cin>>coins[i];
+    int amount;
+    cin>>amount;
+    int ans;
+    ans=noOfWays(0,amount,coins);
+    cout<<ans<<endl;
+	return 0;
+}
