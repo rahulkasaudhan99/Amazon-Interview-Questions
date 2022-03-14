@@ -13,8 +13,8 @@ amt=5
 max level=5/1 = 5
 Time: O(3^5)
 
-
-DP Memoization Top Down
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Method 1 : DP Memoization Top Down
 //There are OVERLAPPING SUB-PROBLEMS in recursive approach and has OPTIMAL SUB-STRUCTURE so we used "2D array to memoize subproblems"
 
 Complexity:
@@ -48,14 +48,97 @@ int main() {
 	return 0;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Method 2: DP Tabulation:
+Time : amount * n  (n=len(coins))
+Space : amount * n
 
-DP Tabulation
+#include<bits/stdc++.h>
+using namespace std;
+
+int countNoOfWays(int n,int amount,vector<int> &coins){
+    int dp[n+1][amount+1];
+    //for amount=0 no coins included 1 way possible
+    //for amount=0 any coins comes and we exclude 1 way possible
+    //fill 1 in all rows (of coins) with amount=0 
+    for(int i=0;i<=n;i++) dp[i][0]=1; //1st column all ones
+    //for amount>=1 if we don't include any coin the 0 ways possible
+    //so exclude first column
+    for(int j=1;j<=amount;j++) dp[0][j]=0;
+    //0th row => no coins included , ith row => ith coin included/excluded
+    //0th column => amount=0 , jth col=>amount=j;
+    //Fill rest of the column by either excluding ith coin + including ith coin
+    int x=0;  //coin included
+    int y=0;  //coin excluded
+    for(int i=1;i<=n;i++){  //coins arr
+        for(int j=1;j<=amount;j++){   //amount
+            x=(j-coins[i-1]>=0)? dp[i][j-coins[i-1]]:0;
+            y=dp[i-1][j];
+            dp[i][j]=x+y;
+        }
+    }
+    return dp[n][amount];
+}
 
 
+int main(){
+    int n,amount;
+    cin>>n;
+    vector<int> coins(n);
+    for(int i=0;i<n;i++) cin>>coins[i];
+    cin>>amount;
+    cout<<countNoOfWays(n,amount,coins)<<endl;
+    
+    return 0;
+}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Method 3: DP Approach optimised for space complexity
+Time : amount * n  (n=len(coins))
+Space : amount * n
+#include<bits/stdc++.h>
+using namespace std;
 
+int countNoOfWays(int n,int amount,vector<int> &coins){
+    int dp[amount+1];
+    // Fill the entries for no coins included
+    // value case amount == 0 we have only 1 way no coins included for each ith iteration of coin
+    //for amount=0 no coins included 1 way possible or any coins comes and we exclude 1 way possible
+    dp[0]=1;
+    //for amount or n>=1 we no coins included will result in 0 ways
+    for (i = 1; i < n+1; i++) dp[i] = 0;
+    
+    // Fill rest of the table entries
+    //exclude first column bcoz for amount=0 always 1 possible way i.e exclude all coin
+    for(int j=1;j<=amount;j++) dp[0][j]=0;
+    //0th column => amount=0 , jth col=>amount=j;
+    //Fill rest of the column by either excluding ith coin + including ith coin
+    int x=0;  //case 1 when ith coin included
+    for(int i=0;i<n;i++){  //coins arr
+        for(int j=1;j<=amount;j++){   //amount
+            x=(j-coins[i]>=0)? dp[j-coins[i]]:0;
+            //y=dp[j]; //ith coin not included => dp[i][j]=x+y;  or use
+            dp[i]+=x;            
+            
+        }
+    }
+    return dp[amount];
+}
+int main(){
+    int n,amount;
+    cin>>n;
+    vector<int> coins(n);
+    for(int i=0;i<n;i++) cin>>coins[i];
+    cin>>amount;
+    cout<<countNoOfWays(n,amount,coins)<<endl;
+    
+    return 0;
+}
 
-Recursive Approach:
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Method 4: Recursive Approach:
+Complexity: no of coins in array (len(coins))^ max levels            (same space)
+
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -81,3 +164,15 @@ int main() {
     cout<<ans<<endl;
 	return 0;
 }
+
+input:
+3
+1 2 5
+5
+output: 4
+
+input:
+3
+1 2 5
+7
+output: 6
