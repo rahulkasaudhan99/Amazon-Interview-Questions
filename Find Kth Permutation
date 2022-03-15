@@ -1,0 +1,56 @@
+//We can also do it by recursion with same approach
+//the approach is observing pattern
+//for k=5 , n=3 , arr=1 2 3 permutations are
+// 1 2 3    2 1 3   3 1 2       here each block have size=2 i.e (n-1)! and we can ignore the blocks < k
+// 1 3 2    2 3 1   3 2 1       index=2   arr[index]=3   the first element in ans is 3  
+//then we erase this index element
+//update k by removing discarded blocks    k=k-(block*index)
+//now repeat until base case i.e n==1 sipmly add this element in last of ans
+#include <bits/stdc++.h>
+using namespace std;
+
+string kthPermutation(vector<int> &v,int n,int k){
+    int fact[n+1];
+    fact[0]=1;
+    string ans="",str="";
+    for(int i=0;i<n;i++) str+=('0'+v[i]);
+    for(int i=1;i<=n;i++) fact[i]=i*fact[i-1];
+    int block,index;   //block size=(n-1)!
+    while(n>=1){
+        if(n==1) return ans+=str[0];
+        block=fact[n-1];
+        index=k/block;
+        if(k%block==0) index-=1;  //we will get next block index
+        ans+=str[index];
+        //remove/erase added element
+        str.erase(str.begin()+index);
+        //update k by removing discarded permutation
+        k-=(block*index);
+        n--;
+    }
+    return ans;
+}
+
+int main() {
+    int n,k;
+    cin>>n;
+    vector<int> v(n);
+    for(int i=0;i<n;i++) cin>>v[i];
+    cin>>k;
+    sort(v.begin(),v.end());
+    cout<<kthPermutation(v,n,k)<<endl;
+	// your code goes here
+	return 0;
+}
+
+
+input:
+3
+1 2 3 
+5
+Output:  312
+input:
+4
+3 4 1 2
+14
+output:  3142
