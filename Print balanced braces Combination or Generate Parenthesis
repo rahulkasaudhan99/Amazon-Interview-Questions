@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<string> ans;
+void generateParenthesis(int i,int n,string curr,int open,int close){
+    //Base case - 2*n brackets added push in ans and return
+    if(i==2*n){
+        ans.push_back(curr);
+        return;
+    }
+    //recursive case
+    //if no of open brackets added <n
+    if(open<n){
+        curr+='(';
+        generateParenthesis(i+1,n,curr,open+1,close);
+        curr.pop_back();
+    }
+    //close Brackets only added if n(open) > no of n(close) brackets added till now in curr
+    if(open>close){
+        curr+=')';
+        generateParenthesis(i+1,n,curr,open,close+1);
+        curr.pop_back();
+    }
+    return;
+}
+
+
+
+int main() {
+    int n;
+    cin>>n;
+    string curr="";
+    generateParenthesis(0,n,curr,0,0);
+    for(auto x:ans) cout<<x<<endl;
+	// your code goes here
+	return 0;
+}
+
+
+input: 3
+output:
+((()))
+(()())
+(())()
+()(())
+()()()
