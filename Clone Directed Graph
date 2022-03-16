@@ -1,0 +1,118 @@
+Method1 : using map for adjacency list
+
+
+
+
+Method 2: use of pointers for graph vertices
+#include <bits/stdc++.h>
+using namespace std;
+
+class graph{
+    int val;
+    list<graph*> l;
+    public:
+    graph(){
+        this->val=0;
+        l = list<graph*>();
+    }
+    graph(int val){
+        this->val=val;
+        l = list<graph*>();
+    }
+    void addEdge(int src,int dest,map<int,graph*> &nodes){
+        if(nodes.find(src)==nodes.end())  nodes[src]=new graph(src);
+        if(nodes.find(dest)==nodes.end()) nodes[dest]=new graph(dest);
+        nodes[src]->l.push_back(nodes[dest]);
+    }
+    void cloneDfs(graph *root,map<int,graph*> &visited){
+        if(!root) return;
+        //cout<<root->val<<endl;
+        visited[root->val]=new graph(root->val);
+        for(auto nbr:root->l){
+            if(!visited[nbr->val]) cloneDfs(nbr,visited);
+            visited[root->val]->l.push_back(visited[nbr->val]);
+        }
+        return;
+    }
+    graph* clone(graph *root){
+        map<int,graph*> visited;
+        cloneDfs(root,visited);
+        return visited[root->val];
+    }
+    void printGraph(graph* root,map<int,bool> visited){
+        //print only those nodes having adjacent edges
+        if(!root->l.empty()){
+            for(auto nbr:root->l){
+                cout<<"Edge "<<root<<" - "<<nbr<<" = "<<root->val<<" -> "<<nbr->val<<endl;
+                if(!visited[nbr->val]){
+                    visited[nbr->val]=true;
+                    printGraph(nbr,visited);
+                }
+            }
+        }
+        return;
+    }
+};
+
+int main() {
+    int E,src;
+    cin>>src>>E;
+    
+    graph g;
+    map<int,graph*> nodes;
+    graph *g1=new graph(src);
+    nodes[src]=g1;
+    
+    for(int i=0;i<E;i++) {
+        int s,d;
+        cin>>s>>d;
+        g.addEdge(s,d,nodes);
+    }
+    //for(auto x:nodes) cout<<x.first<<" "<<x.second<<endl;
+    map<int,bool> visited;
+    for(auto x:nodes) visited[x.first]=false;
+    cout<<"Original Graph"<<endl;
+    g.printGraph(g1,visited);
+    
+    for(auto x:nodes) visited[x.first]=false;
+    graph *clonegraph=g.clone(g1);
+    cout<<"Clone Graph"<<endl;
+    g.printGraph(clonegraph,visited);
+    
+	// your code goes here
+	return 0;
+}
+
+
+Input:
+0 7
+0 1
+0 2
+1 2
+1 3
+1 4
+2 3
+3 4
+Output:
+Original Graph
+Edge 0x55711ea97e80 - 0x55711ea97ef0 = 0 -> 1
+Edge 0x55711ea97ef0 - 0x55711ea97f80 = 1 -> 2
+Edge 0x55711ea97f80 - 0x55711ea98030 = 2 -> 3
+Edge 0x55711ea98030 - 0x55711ea980c0 = 3 -> 4
+Edge 0x55711ea97ef0 - 0x55711ea98030 = 1 -> 3
+Edge 0x55711ea98030 - 0x55711ea980c0 = 3 -> 4
+Edge 0x55711ea97ef0 - 0x55711ea980c0 = 1 -> 4
+Edge 0x55711ea97e80 - 0x55711ea97f80 = 0 -> 2
+Edge 0x55711ea97f80 - 0x55711ea98030 = 2 -> 3
+Edge 0x55711ea98030 - 0x55711ea980c0 = 3 -> 4
+Clone Graph
+Edge 0x55711ea99470 - 0x55711ea99440 = 0 -> 1
+Edge 0x55711ea99440 - 0x55711ea99380 = 1 -> 2
+Edge 0x55711ea99380 - 0x55711ea996e0 = 2 -> 3
+Edge 0x55711ea996e0 - 0x55711ea99410 = 3 -> 4
+Edge 0x55711ea99440 - 0x55711ea996e0 = 1 -> 3
+Edge 0x55711ea996e0 - 0x55711ea99410 = 3 -> 4
+Edge 0x55711ea99440 - 0x55711ea99410 = 1 -> 4
+Edge 0x55711ea99470 - 0x55711ea99380 = 0 -> 2
+Edge 0x55711ea99380 - 0x55711ea996e0 = 2 -> 3
+Edge 0x55711ea996e0 - 0x55711ea99410 = 3 -> 4
