@@ -4,6 +4,9 @@ Method1 : using map for adjacency list
 
 
 Method 2: use of pointers for graph vertices
+Complexity:
+Time: O(n) , Space:O(log n)
+
 #include <bits/stdc++.h>
 using namespace std;
 
