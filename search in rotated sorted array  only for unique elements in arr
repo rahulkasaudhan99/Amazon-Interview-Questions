@@ -1,0 +1,60 @@
+Complexity
+Time O(log n)
+Space O(1)
+//Using the advantage that is either left or right half of array will be sorted
+//this will work for only unique elements in array run in O(log n)
+//Another method below for duplicate elements will take more time than (log n) 
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int searchRotated(vector<int> &arr,int key){
+    int low=0,high=arr.size()-1;
+    int mid;
+    while(low<high){
+        mid=(low + high)/2;
+        //if mid is the key return mid
+        if(arr[mid]==key) return mid;
+        //advantage is that one of the part will be sorted
+        //if left half array is sorted
+        if(arr[mid]>=arr[low]){
+            //key lies in b/w low and mid i.e arr[low]<=key<arr[mid]
+            if(arr[low]<=key && key<=arr[mid]) high=mid-1;
+            else low=mid+1;   //key lies in unsorted part i.e right half
+        }
+        //if right half array is sorted
+        else{
+            //key lies in b/w mid and high i.e arr[mid]<key<=arr[high]
+            if(arr[mid]<=key && key<=arr[high]) low=mid+1;
+            else high=mid-1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+    int key;
+    cin>>key;
+    cout<<"Found "<<key<<" at index : "<<searchRotated(arr,key)<<endl;
+	return 0;
+}
+
+input:
+9
+4 5 6 7 8 9 1 2 3
+10
+output:
+Found 10 at index : -1
+
+input:
+9
+4 5 6 7 8 9 1 2 3
+6
+output:
+Found 6 at index : 2
+
