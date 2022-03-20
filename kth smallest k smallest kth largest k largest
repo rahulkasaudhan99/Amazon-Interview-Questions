@@ -1,0 +1,108 @@
+//Approach: Using min/max heap
+//Complexity  Time  O(nlogn)..........Space O(1)
+#include <bits/stdc++.h>
+using namespace std;
+
+void maxheapify(vector<int> &arr,int &n,int i){
+    //let largest element be i
+    int largest=i;
+    //left and right child
+    int left=2*i+1;
+    int right=2*i+2;
+    if(left<n && arr[left]>arr[largest]) largest=left;
+    if(right<n && arr[right]>arr[largest]) largest=right;
+    if(i!=largest){ //no swap if largest i.e root is greater than left and right
+        swap(arr[i],arr[largest]);
+        maxheapify(arr,n,largest);  //recursively heapify for distributed subtree
+    }
+}
+void minheapify(vector<int> &arr,int &n,int i){
+    //let largest element be i
+    int smallest=i;
+    //left and right child
+    int left=2*i+1;
+    int right=2*i+2;
+    if(left<n && arr[left]<arr[smallest]) smallest=left;
+    if(right<n && arr[right]<arr[smallest]) smallest=right;
+    if(i!=smallest){ //no swap if smallest i.e root is greater than left and right
+        swap(arr[i],arr[smallest]);
+        minheapify(arr,n,smallest);  //recursively heapify for distributed subtree
+    }
+}
+
+int kthSmallest(vector<int> &arr,int n,int k){
+    //0 to floor(n/2)-1 are all non leaf nodes
+    //rest floor(n/2) to n-1 are all leaf nodes in heap
+    //we will need to heapify only 0 to floor(n/2)-1
+    for(int i=n/2-1;i>=0;i--) minheapify(arr,n,i);
+    for(int i=n-1;i>n-k;i--){
+        swap(arr[0],arr[i]);
+        minheapify(arr,i,0);
+    }
+    return arr[0];
+}
+int kthLargest(vector<int> &arr,int n,int k){
+    //0 to floor(n/2)-1 are all non leaf nodes
+    //rest floor(n/2) to n-1 are all leaf nodes in heap
+    //we will need to heapify only 0 to floor(n/2)-1
+    for(int i=n/2-1;i>=0;i--) maxheapify(arr,n,i);
+    for(int i=n-1;i>n-k;i--){
+        swap(arr[0],arr[i]);
+        maxheapify(arr,i,0);
+    }
+    return arr[0];
+    
+}
+void kSmallest(vector<int> &arr,int n,int k){
+    //0 to floor(n/2)-1 are all non leaf nodes
+    //rest floor(n/2) to n-1 are all leaf nodes in heap
+    //we will need to heapify only 0 to floor(n/2)-1
+    for(int i=n/2-1;i>=0;i--) minheapify(arr,n,i);
+    for(int i=n-1;i>n-k-1;i--){
+        cout<<arr[0]<<" ";
+        swap(arr[0],arr[i]);
+        minheapify(arr,i,0);
+    }
+    cout<<endl;
+    return;
+    
+}
+void kLargest(vector<int> &arr,int n,int k){
+    //0 to floor(n/2)-1 are all non leaf nodes
+    //rest floor(n/2) to n-1 are all leaf nodes in heap
+    //we will need to heapify only 0 to floor(n/2)-1
+    for(int i=n/2-1;i>=0;i--) maxheapify(arr,n,i);
+    for(int i=n-1;i>n-k-1;i--){
+        cout<<arr[0]<<" ";
+        swap(arr[0],arr[i]);
+        maxheapify(arr,i,0);
+    }
+    cout<<endl;
+    return;
+}
+
+
+int main() {
+    int n,k;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+	cin>>k;
+	cout<<kthSmallest(arr,n,k)<<endl;
+	kSmallest(arr,n,k);
+	
+	cout<<kthLargest(arr,n,k)<<endl;
+	kLargest(arr,n,k);
+	
+	return 0;
+}
+
+Input:
+7
+3 6 8 11 9 2 4
+4
+output:
+6
+2 3 4 6 
+6
+11 9 8 6 
