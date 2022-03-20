@@ -58,3 +58,71 @@ input:
 output:
 Found 6 at index : 2
 
+
+
+//Another method below for duplicate elements will take more time than (log n) 
+//In worst case can take upto O(n)
+//Special case here
+//when we can't decide wheather to update high or low
+//bcoz arr[low] and arr[high] both are equal to arr[mid]
+//Just increase low and decrease high
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int searchRotatedDuplicate(vector<int> &arr,int key){
+    int low=0,high=arr.size()-1;
+    int mid;
+    while(low<high){
+        mid=(low + high)/2;
+        //if mid is the key return mid
+        if(arr[mid]==key) return mid;
+        //Special case here
+        //when we can't decide wheather to update high or low
+        //bcoz arr[low] and arr[high] both are equal to arr[mid]
+        if(arr[low]==arr[mid] && arr[mid]==arr[high]){
+            low++;
+            high--;
+        }
+        //advantage is that one of the part will be sorted
+        //if left half array is sorted
+        if(arr[mid]>=arr[low]){
+            //key lies in b/w low and mid i.e arr[low]<=key<arr[mid]
+            if(arr[low]<=key && key<=arr[mid]) high=mid-1;
+            else low=mid+1;   //key lies in unsorted part i.e right half
+        }
+        //if right half array is sorted
+        else{
+            //key lies in b/w mid and high i.e arr[mid]<key<=arr[high]
+            if(arr[mid]<=key && key<=arr[high]) low=mid+1;
+            else high=mid-1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+    int key;
+    cin>>key;
+    cout<<"Found "<<key<<" at index : "<<searchRotatedDuplicate(arr,key)<<endl;
+	return 0;
+}
+
+Input:
+12
+10 11 11 12 17 5 7 7 8 9 9 9
+7
+Output:
+Found 7 at index : 6
+
+Input:
+12
+10 11 11 12 17 5 7 7 8 9 9 9
+6
+Output:
+Found 6 at index : -1
+
