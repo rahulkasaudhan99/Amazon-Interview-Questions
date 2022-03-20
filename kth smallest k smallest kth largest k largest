@@ -1,5 +1,14 @@
-//Approach: Using min/max heap
-//Complexity  Time  O(klogn)..........Space O(1)
+//Approach: Using set STL
+//Complexity  Time  O(logn) - avg case  
+		    O(N)    - worst 
+//BUT.........Space O(N)
+
+//Approach: Using minheap/maxheap
+//1) Build a Max/Min Heap tree in O(n) 
+//2) Use Extract Max/Min k times to get k maximum elements from the Max Heap O(k*log(n))
+//Complexity  Time  O(n + klogn)..........Space O(1)
+
+
 #include <bits/stdc++.h>
 using namespace std;
 
