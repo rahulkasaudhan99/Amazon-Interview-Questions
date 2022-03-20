@@ -1,5 +1,5 @@
 //Approach: Using min/max heap
-//Complexity  Time  O(nlogn)..........Space O(1)
+//Complexity  Time  O(klogn)..........Space O(1)
 #include <bits/stdc++.h>
 using namespace std;
 
