@@ -1,3 +1,9 @@
+//Approach: there are total n! permutations for length=n
+//Time : n*n!   //print n! string of len n                  Space: O(r-l)
+//Note: This solution prints duplicate permutations if there are repeating characters in the input string.
+//In Method 2 we will handle Duplicates
+
+Method 1:
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -32,3 +38,7 @@ bac
 bca
 cba
 cab
+
+
+
+Method 2:
