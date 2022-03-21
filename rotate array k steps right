@@ -1,0 +1,52 @@
+
+Approach : Complexity   time : O(n)  //two traversals     Space : O(1)
+//Rotate array k steps to right
+//do k=k%n
+//reverse first n-k elements of array
+//reverse last k elements of array
+//finally reverse whole array
+// ex- 1 2 3 4 5 6 7  k=3, rev first n-k elements 4 3 2 1 and rev last k elements 7 6 5
+// 4 3 2 1 7 6 5   rev whole arr 5 6 7 1 2 3 4
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void rotateArray(vector<int> &arr,int k){
+    int n=arr.size();
+    k%=n;
+    //reverse first n-k elements of array
+    int start=0,end=n-k-1;
+    while(start<end) swap(arr[start++],arr[end--]);
+    //reverse last k elements of array
+    start=n-k,end=n-1;
+    while(start<end) swap(arr[start++],arr[end--]);
+    //finally reverse whole array
+    start=0,end=n-1;
+    while(start<end) swap(arr[start++],arr[end--]);
+    return;
+}
+
+int main() {
+    int n,k;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+    cin>>k;
+    rotateArray(arr,k);
+    for(int x:arr) cout<<x<<" ";
+	return 0;
+}
+
+
+input:
+12
+1 2 3 4 5 6 7 15 24 25 30 40
+30
+output:
+7 15 24 25 30 40 1 2 3 4 5 6 
+input:
+12
+1 2 3 4 5 6 7 15 24 25 30 40
+5
+output:
+15 24 25 30 40 1 2 3 4 5 6 7 
