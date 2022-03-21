@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class minStack{
+    stack<int> s;
+    int minElement;
+    public:
+    void push(int val){
+        if(s.empty()){
+            minElement=val;
+            s.push(val);
+            return;
+        }
+        if(val<minElement){
+            int y=2*val-minElement;
+            minElement=val;
+            s.push(y);
+        }
+        return;
+    }
+    void pop(){
+        if(s.empty()) return;
+        int y=s.top();
+        s.pop();
+        if(y<minElement){
+            minElement=2*minElement-y;
+        }
+        return;
+    }
+    int extractMin(){
+        return minElement;
+    }
+};
+
+
+int main() {
+	minStack st;
+	st.push(29);
+	st.push(19);
+	st.push(18);
+	st.push(16);
+	st.push(15);
+	cout<<st.extractMin()<<endl;
+	st.pop();
+	st.pop();
+	cout<<st.extractMin()<<endl;
+	return 0;
+}
