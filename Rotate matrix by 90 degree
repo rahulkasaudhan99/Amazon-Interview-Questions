@@ -1,0 +1,116 @@
+Mwthod 1:
+//Approach used:
+//first take mirror image i.e reverse each row
+//then reverse each diagonal
+#include <bits/stdc++.h>
+using namespace std;
+
+void rotateMatrix(vector<vector<int>> &mat){
+    int rows=mat.size();
+    int cols=mat[0].size();
+    //take mirror image revrse for each row wise i.e
+    //reverse each row
+    for(int i=0;i<rows;i++){
+        int start=0,end=cols-1;
+        while(start<end) swap(mat[i][start++],mat[i][end--]);
+    }
+    //reverse across diagonals
+    //firstly -> left to right i.e from upper left and lower right to upper right
+    int i=rows-1,j=0;
+    while(j<cols){
+        int rowUp=0,colUp=j;
+        int rowBelow=i,colBelow=cols-1;
+        while(rowUp<rowBelow){
+            swap(mat[rowUp++][colUp++],mat[rowBelow--][colBelow--]);
+        }
+        i--,j++;
+    }
+    //then up to down from 2nd row i.e from upper left + 1 and lower right - 1 to lower left
+    i=1,j=cols-2;
+    while(i<rows){
+        int rowUp=i,colUp=0;
+        int rowBelow=rows-1,colBelow=j;
+        while(rowUp<rowBelow){
+            swap(mat[rowUp++][colUp++],mat[rowBelow--][colBelow--]);
+        }
+        i++,j--;
+    }
+}
+
+int main() {
+    int n,m; //n rows m columns
+    cin>>n>>m;
+    vector<vector<int>> mat(n,vector<int> (m));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++) cin>>mat[i][j];
+    }
+    
+    rotateMatrix(mat);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++) cout<<mat[i][j]<<" ";
+        cout<<endl;
+    }
+	return 0;
+}
+
+Input:
+4 4
+5 1 9 11
+2 4 8 10
+13 3 6 7
+15 14 12 16
+Output:
+15 13 2 5 
+14 3 4 1 
+12 6 8 9 
+16 7 10 11 
+
+
+Method: 2
+//Approach:(In-place) moving square in cyclic manner WILL WORK ONLY FOR SQUARE MAT
+//There is N/2 squares/cycles in matrix size N*N.(if N odd then innermost square will have 1 element only)
+//Run a loop to Process one square at a time i.e loop i from 0 to N/2–1 (or 1 to N/2)
+//Consider elements in group of 4 in current square, rotate the 4 elements at a time. 
+//So the number of such groups in a cycle is N – 2*i.
+//So run a loop in each cycle from x to N – x – 1, loop counter is y
+//The elements in the current group is (x, y), (y, N-1-x), (N-1-x, N-1-y), (N-1-y, x), 
+//now rotate the these 4 elements, i.e 
+//(x, y) <- (y, N-1-x), 
+//(y, N-1-x)<- (N-1-x, N-1-y), 
+//(N-1-x, N-1-y)<- (N-1-y, x), 
+//(N-1-y, x)<- (x, y)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void rotateMatrix(vector<vector<int>> &mat){
+    int N=mat.size();
+    //process squares one by one i.e N/2 squares
+    for(int i=0;i<N/2;i++){
+        for(int j=i;j<N-i-1;j++){
+            int temp=mat[i][j];               //buttomleft -> upper left
+            mat[i][j]=mat[N-j-1][i];          //buttomright -> bottomleft
+            mat[N-j-1][i]=mat[N-i-1][N-j-1];  //upperright -> bottomright
+            mat[N-i-1][N-j-1]=mat[j][N-i-1];  //upperleft -> upperright
+            mat[j][N-i-1]=temp;
+        }
+    }
+    
+}
+
+int main() {
+    int n; //n rows m columns
+    cin>>n;
+    vector<vector<int>> mat(n,vector<int> (n));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++) cin>>mat[i][j];
+    }
+    
+    rotateMatrix(mat);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++) cout<<mat[i][j]<<" ";
+        cout<<endl;
+    }
+	return 0;
+}
+
