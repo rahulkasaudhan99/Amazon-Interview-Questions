@@ -1,0 +1,61 @@
+Approach : Simply attach first head to n-k node with tail node and head=(n-k+1)th node
+#include <bits/stdc++.h>
+using namespace std;
+
+class List{
+    int val;
+    public:
+    List *next;
+    List(){
+        this->val=0;
+        this->next=NULL;
+    }
+    List(int v){
+        this->val=v;
+        this->next=NULL;
+    }
+    List* rotateList(List* head,int k){
+        int size=0;
+        List *tail=NULL;
+        List *ptr=head;
+        while(ptr){
+            size++;
+            tail=ptr;
+            ptr=ptr->next;
+        }
+        k%=size;
+        ptr=head;
+        while(k--) ptr=ptr->next;
+        List *temp=ptr->next;
+        ptr->next=NULL;
+        tail->next=head;
+        head=temp;
+        return head;
+    }
+    void printList(List *head){
+        while(head){
+            cout<<head->val<<" -> ";
+            head=head->next;
+        }
+        cout<<endl;
+    }
+};
+
+
+int main() {
+    List *head=NULL;
+    List l;
+    head=new List(10);
+    head->next=new List(15);
+    head->next->next=new List(20);
+    head->next->next->next=new List(25);
+    head->next->next->next->next=new List(30);
+    l.printList(head);
+    
+    head=l.rotateList(head,2);
+    l.printList(head);
+    
+    head=l.rotateList(head,7);
+    l.printList(head);
+	return 0;
+}
