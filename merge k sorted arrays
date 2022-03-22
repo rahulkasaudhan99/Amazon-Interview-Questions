@@ -1,0 +1,33 @@
+Method 1
+//Naive Approach : The very naive method is to create an output array of size n * k and then copy all the elements into the output array followed by sorting.
+//Time Complexity : O(n*k*log(n*k)). 
+//Space Complexity : O(n*k)
+
+Method 2
+//Efficient Approach :The process might begin with merging arrays into groups of two. After the first merge, we have k/2 arrays. 
+//Again merge arrays in groups, now we have k/4 arrays. This is similar to merge sort. 
+//Divide k arrays into two halves containing an equal number of arrays until there are two arrays in a group. 
+//This is followed by merging the arrays in a bottom-up manner. 
+Algorithm:
+//Create a recursive function which takes k arrays and returns the output array.
+//In the recursive function, if the value of k is 1 then return the array else if the value of k is 2 then merge the two arrays in linear time and return the array.
+//If the value of k is greater than 2 then divide the group of k elements into two equal halves and recursively call the function, 
+//i.e 0 to k/2 array in one recursive function and k/2 to k array in another recursive function.
+//Print the output array.
+
+Time Complexity: O( n * k * log k). 
+There are log k levels as in each level the k arrays are divided in half and at each level the k arrays are traversed. So time Complexity is O( n * k ).
+Space Complexity: O( n * k * log k). 
+In each level O( n*k ) space is required So Space Complexity is O( n * k * log k).
+
+
+
+
+Method 3
+Approach : using min heap -  For a different and particular sized array, this solution works much better.
+// The process must start with creating a MinHeap and inserting the first element of all the k arrays. 
+//Remove the root element of Minheap and put it in the output array and insert the next element from the array of removed element.
+// To get the result the step must continue until there is no element in the MinHeap left. 
+
+Time Complexity :O( n * k * log k), Insertion and deletion in a Min Heap requires log k time. So the Overall time complexity is O( n * k * log k)
+Space Complexity :O(k), If Output is not stored then the only space required is the Min-Heap of k elements. So space Complexity is O(k).
