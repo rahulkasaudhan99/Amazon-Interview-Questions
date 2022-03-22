@@ -1,0 +1,112 @@
+# For BST 
+Complexity : Time : O(h)      Space : O(1)      ...... h=max(height of tree)
+Approach : Assuming both p and q are present in tree 
+//Then traverse the tree and check if both elements are at one side left or right subtree then traverse to that side only
+//else if the  node p & q are at different sides one in left other right then curr root is the LCA of p and q
+#include <bits/stdc++.h>
+using namespace std;
+class Tree{
+    public:
+    int val;
+    Tree *left;
+    Tree *right;
+
+    Tree(){
+        this->val=0;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    Tree(int v){
+        this->val=v;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    Tree* lowestCommonAncestor(Tree *root,int p,int q){
+        if(!root) return root;
+        if(root->val>p && root->val>q)
+            return lowestCommonAncestor(root->left,p,q);
+        if(root->val<p && root->val<q)
+            return lowestCommonAncestor(root->right,p,q);
+        
+        return root;
+    }
+};
+
+
+int main() {
+    Tree *root = new Tree(20);
+    root->left = new Tree(8);
+    root->right = new Tree(22);
+    root->left->left = new Tree(4);
+    root->left->right = new Tree(12);
+    root->left->right->left = new Tree(10);
+    root->left->right->right = new Tree(14);
+    Tree *ans=NULL;
+    Tree t;
+    ans=t.lowestCommonAncestor(root,10,14);
+    cout<<ans->val<<endl;
+	return 0;
+}
+
+
+Output:
+12
+
+For Binary Tree
+Complexity : Time : O(n)      Space : O(1)
+Approach :Assuming both p and q are present in root
+//Simply traverse the tree and find if any of p or q is in left subtree or right subtree then return root
+//if for any node left and right subtree both does not return NULL then this node is the ans
+//if for any node any one side returns NULL then return that non NULL subtree
+//If both are not present then pass two flag var and both must be true if both p and q are present......else no lca exist for 1 element
+
+#include <bits/stdc++.h>
+using namespace std;
+class Tree{
+    public:
+    int val;
+    Tree *left;
+    Tree *right;
+
+    Tree(){
+        this->val=0;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    Tree(int v){
+        this->val=v;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    //Assuming that both p and q are present in the tree
+    //If both are not present then pass two flag var and both must be true if both p and q are present
+    //else no lca exist for 1 element
+    Tree* lowestCommonAncestor(Tree *root,int p,int q){
+        if(!root) return root;
+        if(root->val==p) return root;
+        if(root->val==q) return root;
+        Tree* left=lowestCommonAncestor(root->left,p,q);
+        Tree* right=lowestCommonAncestor(root->right,p,q);
+        if(left && right) return root;
+        return left!=NULL? left:right;
+    }
+};
+
+
+int main() {
+    Tree *root = new Tree(20);
+    root->left = new Tree(8);
+    root->right = new Tree(18);
+    root->left->left = new Tree(15);
+    root->left->right = new Tree(12);
+    root->left->right->left = new Tree(10);
+    root->left->right->right = new Tree(14);
+    Tree *ans=NULL;
+    Tree t;
+    ans=t.lowestCommonAncestor(root,10,14);
+    cout<<ans->val<<endl;
+	return 0;
+}
+
+Output:
+12
