@@ -1,6 +1,12 @@
 //Approach : Dynamic Programming space optimized
 //Time O(N*N)   Space : O(N)
 
+//To find the LIS for a given array, we need to return max(L(i)) where 0 < i < n.
+//Formally, the length of the longest increasing subsequence ending at index i, will be 1 greater than the maximum of lengths of all 
+//longest increasing subsequences ending at indices before i, where arr[j] < arr[i] (j < i).
+//Ex - For len = 4  , f(4) = 1 + max(f(1), f(2), f(3))
+//Thus, we see the LIS problem satisfies the optimal substructure property as the main problem can be solved using solutions to subproblems.
+
 #include <bits/stdc++.h>
 using namespace std;
 
