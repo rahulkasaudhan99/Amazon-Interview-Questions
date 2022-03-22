@@ -1,0 +1,95 @@
+# Reverse array in groups
+Approach : reverse array in one trversal   Time : O(N)
+#include <bits/stdc++.h>
+using namespace std;
+
+void reverseArrayGroups(int *arr,int n,int k){
+    for(int i=0;i<n;i+=k){
+        int start=i,end=min(i+k-1,n-1);
+        while(start<end) swap(arr[start++],arr[end--]);
+    }
+    return;
+}
+int main() {
+    int n,k;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++) cin>>arr[i];
+    cin>>k;
+    reverseArrayGroups(arr,n,k);
+    for(int i:arr) cout<<i<<" ";
+	return 0;
+}
+
+Input:
+8
+1 2 3 4 5 6 7 8
+3
+Output:
+3 2 1 6 5 4 8 7 
+
+
+# Reverse list in groups
+Time : O(N)
+Approach : Reverse the list for first k elements and then recursively reverse for next k groups by passing nextnode as head
+#include <bits/stdc++.h>
+using namespace std;
+
+class List{
+    int val;
+    public:
+    List *next;
+    List(){
+        this->val=0;
+        this->next=NULL;
+    }
+    List(int v){
+        this->val=v;
+        this->next=NULL;
+    }
+    //recursively reverse the arrays by reversing k nodes and passing next node again
+    List* reverseListGroups(List *head,int k){
+        if(!head) return NULL;
+        
+        List *prev=NULL;
+        List *nextnode=NULL;
+        List *current=head;
+        int count=k;
+        while(current && count--){
+            nextnode=current->next;
+            current->next=prev;
+            prev=current;
+            current=nextnode;
+        }
+        
+        //recurse for next k nodes
+        if(nextnode) head->next=reverseListGroups(nextnode,k);
+        return prev;
+    }
+    void printList(List *head){
+        while(head){
+            cout<<head->val<<" -> ";
+            head=head->next;
+        }
+        cout<<endl;
+    }
+};
+int main() {
+    List *head=NULL;
+    List list;
+    head=new List(10);
+    head->next=new List(20);
+    head->next->next=new List(30);
+    head->next->next->next=new List(40);
+    head->next->next->next->next=new List(50);
+    head->next->next->next->next->next=new List(60);
+    head->next->next->next->next->next->next=new List(70);
+    list.printList(head);
+    head=list.reverseListGroups(head,2);
+    list.printList(head);
+	return 0;
+}
+
+Output:
+10 -> 20 -> 30 -> 40 -> 50 -> 60 -> 70 -> 
+20 -> 10 -> 40 -> 30 -> 60 -> 50 -> 70 -> 
