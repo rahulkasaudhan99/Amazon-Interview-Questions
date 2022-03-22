@@ -1,0 +1,72 @@
+//Queue using linked list
+#include <bits/stdc++.h>
+using namespace std;
+
+class node{
+    public:
+    int val;
+    node *next;
+    node(int v){
+        this->val=v;
+        this->next=NULL;
+    }
+};
+class Queue{
+    node *front;
+    node *rear;
+    public:
+    Queue(){
+        this->front=NULL;
+        this->rear=NULL;
+    }
+    bool isEmpty(){
+        return front==NULL;
+    }
+    void push(int v){
+        if(!front){
+            front=rear=new node(v);
+            return;
+        }
+        rear->next=new node(v);
+        rear=rear->next;
+        return;
+    }
+    int pop(){
+        if(!front){
+            return -1;
+        }
+        node *temp=front;
+        front=front->next;
+        int v=temp->val;
+        delete(temp);
+        return v;
+    }
+    int getFront(){
+        if(!front) return -1;
+        return front->val;
+    }
+    int getRear(){
+        if(!front) return -1;
+        return rear->val;
+    }
+    
+};
+
+
+int main() {
+    Queue q;
+    q.isEmpty()? cout<<"True"<<endl:cout<<"False"<<endl;
+    q.push(5);
+    q.push(10);
+    q.push(2);
+    cout<<q.getFront()<<endl;
+    q.pop();
+    cout<<q.getFront()<<endl;
+	return 0;
+}
+
+
+Output:
+True
+5
+10
