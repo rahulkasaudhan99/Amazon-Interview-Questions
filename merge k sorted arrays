@@ -31,3 +31,55 @@ Approach : using min heap -  For a different and particular sized array, this so
 
 Time Complexity :O( n * k * log k), Insertion and deletion in a Min Heap requires log k time. So the Overall time complexity is O( n * k * log k)
 Space Complexity :O(k), If Output is not stored then the only space required is the Min-Heap of k elements. So space Complexity is O(k).
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define n 4
+
+void merge(int arr1[],int arr2[],int n1,int n2,int arr3[]){
+    int i=0,j=0,k=0;
+    while(i<n1 && j<n2){
+        if(arr1[i]<arr2[j])
+            arr3[k++]=arr1[i++];
+        else arr3[k++]==arr2[j++];
+    }
+    while(i<n1) arr3[k++]=arr1[i++];
+    
+    while(j<n2) arr3[k++]=arr2[j++];
+    return;
+}
+
+void mergeKArrays(int arr[][n],int start,int end,int output[]){
+    //only 1 array remains in range (i,j)
+    if(start==end){
+        for(int p=0;p<n;p++) output[p]=arr[start][p];
+        return;
+    }
+    if(end-start==1){
+        merge(arr[start],arr[end],n,n,output);
+        return;
+    }
+    int size1=n*(((start+end)/2)-start+1);
+    int size2=n*(end-((start+end)/2));
+    int out1[size1];
+    int out2[size2];
+    mergeKArrays(arr,start,(start+end)/2,out1);
+    mergeKArrays(arr,(start+end)/2+1,end,out2);
+    merge(out1,out2,size1,size2,output);
+}
+
+int main() {
+	int arr[][n] =  {{2, 6, 12, 34},
+                     {1, 9, 20, 1000},
+                     {23, 34, 90, 2000}};
+                     int k = sizeof(arr)/sizeof(arr[0]);
+    int output[n*k];
+    mergeKArrays(arr,0,2, output);
+    for(int x:output) cout<<x<<" ";
+    cout<<endl;
+	return 0;
+}
