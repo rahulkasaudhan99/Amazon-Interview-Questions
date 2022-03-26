@@ -1,7 +1,9 @@
 Method 1:
-Approach : using minHeap
+Approach : using minHeap (insert first elements of all k lists then pop Min Node one by one and attach to output 
+//also push next element in that list of popped node if not null
 Complexity : Time  O(nk Log k)     Space : O(k)   (minHeap size==k to store k elements , k= no of lists)
 
+Note: For k unsorted lists insert all elements in minHeap and then assign values one by one to each node and join then 
 
 #include <bits/stdc++.h>
 using namespace std;
