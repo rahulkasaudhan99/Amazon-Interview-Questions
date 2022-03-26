@@ -71,6 +71,8 @@ int main(){
     return 0;
 }
 
+output :
+1 2 6 9 12 20 23 34 34 90 1000 2000 
 
 
 Method 3
@@ -83,7 +85,51 @@ Time Complexity :O( n * k * log k), Insertion and deletion in a Min Heap require
 Space Complexity :O(k), If Output is not stored then the only space required is the Min-Heap of k elements. So space Complexity is O(k).
 
 
+#include <bits/stdc++.h>
+using namespace std;
+#define pii pair<int,int>
+
+//total k arrays to be merged
+void mergeKArrays(vector<vector<int>> &arr,int k,vector<int> &output,vector<int> &next){
+    //next array stores next element index for each element in minHeap
+    //minHeap using priority_queue of pair<int,int>
+    //where first is the element and second is index of which array elements belongs
+    priority_queue<pii,vector<pii>,greater<pii>> minHeap;
+    //push first element from all k arrays to minHeap
+    for(int i=0;i<k;i++) {
+        minHeap.push(make_pair(arr[i][0],i));
+    }
+    while(!minHeap.empty()){
+        //min element popped at top of minHeap
+        pii minNode=minHeap.top();
+        minHeap.pop();
+        int element=minNode.first;
+        int index=minNode.second;
+        int nxt=next[index]++;
+        output.push_back(element);
+        //if the element popped from minHeap has next element in that array 
+        if(nxt<arr[index].size()){
+            pii nextMinNode=make_pair(arr[index][nxt],index);
+            //push next element from that array to minHeap else continue
+            minHeap.push(nextMinNode);
+        }
+    }
+}
+
+int main() {
+	vector<vector<int>> arr{{2, 6, 12, 34},
+                     {1, 9, 20, 1000},
+                     {23, 34, 90, 2000}};
+    int k=3;
+    //next array stores next element index for each element in minHeap
+    vector<int> next(3,1);
+    vector<int> output; // to store the final output array is passed by reference
+    mergeKArrays(arr,k,output,next);
+    for(int x:output) cout<<x<<" ";
+	return 0;
+}
 
 
 
-
+output :
+1 2 6 9 12 20 23 34 34 90 1000 2000 
