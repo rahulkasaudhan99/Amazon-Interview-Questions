@@ -1,0 +1,109 @@
+Method 1:
+Approach : using minHeap
+Complexity : Time  O(nk Log k)     Space : O(k)   (minHeap size==k to store k elements , k= no of lists)
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define pil pair<int,ListNode*>
+
+class ListNode{
+    public:
+    int val;
+    ListNode *next;
+    ListNode(){ 
+        this->val=0;
+        this->next=NULL;
+    }
+    ListNode(int v){ 
+        this->val=v;
+        this->next=NULL;
+    }
+    ListNode* pushBack(int v,ListNode* tail){
+        ListNode *temp=new ListNode(v); 
+        if(!tail) return temp;
+        tail->next=temp;
+        tail=tail->next;
+        return tail;
+    }
+    void printList(ListNode *head){
+        while(head){
+            cout<<head->val<<" -> ";
+            head=head->next;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    //method to merge k sorted lists
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        //minHeap to get next min node in all lists in O(log n) (n=no of nodes)
+        //pil=pair<val,ListNode>  to get next min node in all lists
+        priority_queue<pil,vector<pil>,greater<pil>> minHeap;
+        int n=lists.size();    
+        ListNode *output=NULL; //ptr to output list
+        ListNode *ptr=NULL;  //to trverse in output list
+        for(int i=0;i<n;i++){
+            ListNode *temp=lists[i];
+            if(temp) minHeap.push(make_pair(temp->val,temp));
+        }
+        while(!minHeap.empty()){
+            //pop the min element node and push next element in that list if not null
+            pil top=minHeap.top();
+            minHeap.pop();
+            //node is popped min node
+            ListNode *node=top.second;
+            //forward is node next to popped min node in that list
+            ListNode *forward=node->next;
+            if(!output){
+                output=node;
+                ptr=output;
+            }
+            else{
+                ptr->next=node;
+                ptr=ptr->next;
+            }
+            if(forward){
+                minHeap.push(make_pair(forward->val,forward));
+            }
+        }
+        return output;
+    }
+};
+
+
+    
+    
+int main() {
+    int k;
+    cin>>k;  //k lists with size n each
+    vector<ListNode*> lists(k,NULL);
+    ListNode list;
+    for(int i=0;i<k;i++){
+        int size;
+        cin>>size;
+        ListNode *head=NULL,*tail=NULL;
+        while(size--){
+            int v;
+            cin>>v;
+            tail=list.pushBack(v,tail);
+            if(!head) head=tail;
+        }
+        lists[i]=head;
+    }
+    ListNode *output=list.mergeKLists(lists);
+    list.printList(output);
+	return 0;
+}
+
+
+Input:
+3
+3
+1 4 5
+3
+1 3 4
+2
+2 6
+Output:
+1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6 -> 
