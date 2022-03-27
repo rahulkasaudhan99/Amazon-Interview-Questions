@@ -1,0 +1,88 @@
+Method 1: Simple Naive
+Approach : A simple solution is to one by one consider all substrings of the first string and for every substring check if it is a substring in the second string. 
+Keep track of the maximum length substring. There will be O(m^2) substrings and we can find whether a string is substring on another string in O(n) time
+Time : O(m^2)
+Space : O(1)
+
+
+Method 2 
+Approach : Dynamic Programming can be used to find the longest common substring in O(m*n) time. 
+The idea is to find the length of the longest common suffix for all substrings of both strings and store these lengths in a table. 
+
+if(s1[i]==s2[j])   dp[i][j]=1+dp[i-1][j-1];
+else dp[i][j]=0;
+
+
+Time : O(m*n)     // m=size1 , n=size2
+Space : O(m*n)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int longestCommonSubstring(string &s1,string &s2){
+    int size1=s1.length();
+    int size2=s2.length();
+    int ans=0;
+    int dp[size1+1][size2+1];
+    for(int i=0;i<=size1;i++){
+        for(int j=0;j<=size2;j++){
+            if(i==0 || j==0){
+                dp[i][j]=0;
+                continue;
+            }
+            if(s1[i-1]==s2[j-1]){
+                dp[i][j]=1+dp[i-1][j-1];
+                ans=max(ans,dp[i][j]);
+            }
+            else dp[i][j]=0;
+        }
+    }
+    return ans;
+}
+
+int main() {
+	string s1,s2;
+	cin>>s1>>s2;
+	cout<<longestCommonSubstring(s1,s2)<<endl;
+	return 0;
+}
+
+
+
+Method 3
+Space optimized approach
+Time : O(m*n)
+Space : O(min(m,n))     // m=size1 , n=size2
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int longestCommonSubstring(string &s1,string &s2){
+    int size1=s1.length();
+    int size2=s2.length();
+    int ans=0;
+    //Space optimized as we can see only prev row is used to update new row
+    //so we can solve the problem in space optimized way
+    int dp[2][size2+1];
+    //fill first row with 0's
+    for(int i=0;i<=size2;i++) dp[0][i]=0;
+    
+    for(int i=1;i<=size1;i++){
+        for(int j=1;j<=size2;j++){
+            if(s1[i-1]==s2[j-1]){
+                dp[i%2][j]=1+dp[(i-1)%2][j-1];
+                ans=max(ans,dp[i%2][j]);
+            }
+            else dp[i%2][j]=0;
+        }
+    }
+    return ans;
+}
+
+int main() {
+	string s1,s2;
+	cin>>s1>>s2;
+	cout<<longestCommonSubstring(s1,s2)<<endl;
+	return 0;
+}
