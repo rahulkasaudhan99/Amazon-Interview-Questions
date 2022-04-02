@@ -1,0 +1,69 @@
+Method 1: recursively checking for both subtree
+Complexity:   Time: O(N)    Space: O(h)     where h=max(height) of the tree
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class binaryTree{
+    int val;
+    public:
+    binaryTree* left;
+    binaryTree* right;
+    binaryTree(){
+        this->val=0;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    binaryTree(int v){
+        this->val=v;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    //function to check to binary tree are mirror image
+    bool isMirror(binaryTree *root1,binaryTree *root2){
+        //base case - if both null then they are mirror
+        if(!root1 && !root2) return true;
+        //if both root is equal
+        //and left subtree of left tree and right subtree right subtree is same
+        //and right subtree of right tree and left subtree of right subtree is same
+        //then return true;
+        if(root1 && root2 && root1->val==root2->val)
+            return isMirror(root1->left,root2->right) && isMirror(root1->right,root2->left);
+        return false;
+    }
+    //function to check binary tree is mirror of itself
+    bool isMirrorItself(binaryTree *root){
+        bool flag=isMirror(root,root);
+        if(flag) cout<<"True"<<endl;
+        else cout<<"False"<<endl;
+        return flag;
+    }
+    
+};
+
+int main() {
+	binaryTree *root=NULL;
+	binaryTree tree;
+	root = new binaryTree(1);
+    root->left = new binaryTree(2);
+    root->right = new binaryTree(2);
+    root->left->left = new binaryTree(3);
+    root->left->right = new binaryTree(4);
+    root->right->left = new binaryTree(4);
+    root->right->right = new binaryTree(3);
+    
+	tree.isMirrorItself(root);
+	
+	binaryTree *root2=NULL;
+	root2 = new binaryTree(1);
+    root2->left = new binaryTree(2);
+    root2->right = new binaryTree(2);
+    root2->left->left = new binaryTree(3);
+    root2->right->left = new binaryTree(4);
+    root2->right->right = new binaryTree(3);
+    
+    tree.isMirrorItself(root2);
+    
+	return 0;
+}
