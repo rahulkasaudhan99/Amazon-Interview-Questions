@@ -1,0 +1,77 @@
+Problem : check if string s1 is rotation of string s2
+Approach : Simply concatenate s1 and s1    i.e    temp=s1+s1  and if s2 is substring of temp then return true  else false
+Time : O(2N)  (if we use KMP for check substring)    N=len(s1)    2N=len(temp)
+    as KMP matcher takes (n) time(WORST case) to find a substring in a string of length n where length of substring
+    
+#include <bits/stdc++.h>
+using namespace std;
+
+void computeLpsArray(string pat,int *lps){
+    int len=pat.length();
+    lps[0]=0;
+    int i=0,j=1;
+    while(j<len){
+        if(pat[i]==pat[j]){
+            i++;
+            lps[j]=i;
+            j++;
+        }
+        else{
+            if(i!=0) i=lps[i-1];
+            else{
+                lps[j]=0;
+                j++;
+            }
+        }
+    }
+}
+
+bool kmpSearch(string pat,string text){
+    int lenPat=pat.length();
+    int lenText=text.length();
+    int lps[lenPat];  //lps is longest prefix suffix array
+    computeLpsArray(pat,lps);
+    int i=0; //index for text
+    int j=0;  //index for pat
+    while(i<lenText){
+        if(pat[j]==text[i]){
+            i++;
+            j++;
+        }
+        if(j==lenPat){
+            return true;
+        }
+        else if(i<lenText && pat[j]!=text[i]){
+            if(j!=0) j=lps[j-1];
+            else i++;
+        }
+    }
+    return false;
+}
+
+int main() {
+    string s1,s2;
+    cin>>s1>>s2;
+    //concatenate s1 and s1
+    string temp=s1+s1;
+    //s2 is pattern to be matched and temp is text 
+    kmpSearch(s2,temp)? cout<<"True"<<endl : cout<<"False"<<endl;
+	return 0;
+}
+
+
+
+Input:
+abcd
+cdab
+output: True
+
+Input:
+abcd
+acbd
+output: False
+
+Input:
+abcdef
+defabc
+output: True
