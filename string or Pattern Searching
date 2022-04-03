@@ -1,0 +1,104 @@
+Problem : Find all occurences of Pattern  Pat (of len m) in the text (of len n)
+METHOD 1: Naive - search one by one for each character in the text if first character of Pat and text matches
+Complexity : O(m(n-m+1))
+
+METHOD 2 : RABIN KARP Algorithm - Like the Naive Algorithm, Rabin-Karp algorithm also slides the pattern one by one. But unlike the Naive algorithm, 
+Rabin Karp algo matches the hash val of the Pat with the hash val of current substr of text, and if matches then only it starts matching individual characters.
+Complexity : RunTime :  Avg and Best case - O(m+n)     
+BUT in Worst Case - O(mn)  occurs when all chars of Pat and text are same(hash val of all the substr of text matches with Pat)
+
+METHOD 3 : KMP algo (Knuth Morris Pratt)     Time : O(n) in WORST case also.
+KMP matching algorithm uses degenerating property (pattern having same sub-patterns appearing more than once in the pattern)
+longest prefix==suffix      ex- pat=abcab  here abcab longest prefix==suffix  i.e   ab=ab [0,0,0,1,2]   prefix or suffix is a,ab,abc proper prefix a,ab
+ex - pat=abcaby   then lps will be [0,0,0,1,2,0]
+
+Examples of lps[] construction:
+For the pattern “AAAA”, 
+lps[] is [0, 1, 2, 3]
+
+For the pattern “ABCDE”, 
+lps[] is [0, 0, 0, 0, 0]
+
+For the pattern “AABAACAABAA”, 
+lps[] is [0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]
+
+For the pattern “AAACAAAAAC”, 
+lps[] is [0, 1, 2, 0, 1, 2, 3, 3, 3, 4] 
+
+For the pattern “AAABAAA”, 
+lps[] is [0, 1, 2, 0, 1, 2, 3]
+
+How to use lps[] to decide next positions (or to know a number of characters to be skipped)?
+initially i=0 //index for text      and    j=0    /index for pat
+We start comparison of pat[j] with j = 0 with characters of current window of text.    (Note that j starts with 0 and increment it only when there is a match).
+
+Now 3 cases possible
+1.   text[i] matches with pat[j]     then i++ , j++ 
+2.     if j==m i.e full pattern matched upto len m then push Starting index of match (i-j) in ans answers
+3.   When we see a mismatch
+        move to the previous prefix which is also a suffix    ( Do not match lps[0..lps[j-1]] characters, they will match anyway )
+        that is if j>0   then j = lps[j-1] 
+                else  i++     that is move to next window in the text
+
+
+Code:
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void computeLpsArray(string pat,int *lps){
+    int len=pat.length();
+    lps[0]=0; //lps of len 1 will always be zero
+    int i=0,j=1;  //i is the length of previous longest prefix suffix
+    while(j<len){
+        if(pat[i]==pat[j]){
+            i++;
+            lps[j]=i;
+            j++;
+        }
+        else{
+            if(i!=0) i=lps[i-1];
+            else{
+                lps[j]=0;
+                j++;
+            }
+        }
+    }
+}
+
+void kmpSearch(string pat,string text){
+    int lenPat=pat.length();
+    int lenText=text.length();
+    int lps[lenPat];  //lps is longest prefix suffix array
+    computeLpsArray(pat,lps);
+    int i=0; //index for text
+    int j=0;  //index for pat
+    //vector<int> res;     //res vector to store starting index
+    while(i<lenText){
+        if(pat[j]==text[i]){
+            i++;
+            j++;
+        }
+        if(j==lenPat){
+            cout<<"Pattern Found at position "<<i-j;
+            //res.push_back(i-j);
+            j=lps[j-1];
+        }
+        else if(i<lenText && pat[j]!=text[i]){
+            if(j!=0) j=lps[j-1];
+            else i++;
+        }
+    }
+    //return res;
+}
+
+int main() {
+    string text= "ABABDABACDABABCABAB";
+    string pat= "ABABCABAB";
+    kmpSearch(pat, text);
+	return 0;
+}
+
+
+output:
+Pattern Found at position 10
