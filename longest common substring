@@ -1,0 +1,74 @@
+Approach : Dynamic programming  
+Here we use tabulation method to store longest common substring
+Ex - 2 strings s1 of len1 and s2 of len2      s1=acdghr  len1=6   s2=abcdgh len2=6
+we will make a table dp  of dimension len1+1 and len2+1 
+i will be used for index of s1    j will be used for index of s2
+dp[i][j]  will store longest common substring ending on ith index of s1 and jth index of s2
+
+for i=0 s1 of len 0 and j upto len2  that is s2 of any length  dp[i][j]=0    lcs will be 0
+for j=0 s2 of len 0 and i upto len1  that is s1 of any length  dp[i][j]=0    lcs will be 0
+
+Formula used
+if s1[i-1]==s2[j-1]   then   dp[i][j] = 1+dp[i-1][j-1]      //i-1 j-1 used bcoz index i and j starts with 1
+else dp[i][j]=0
+
+//for lcs length l we will return max(dp[i][j])
+//for lcs we will store i and j where dp[i][j] is max
+//traverse back i-1,j-1 upto l times  where l=len(lcs)
+
+Complexity : Time O(len1*len2)    Space  O(len1*len2)
+Optimization : We can optimize space from O (len1 * len2)  to O(len1*2)   as we need only previous row for calculation
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int longestCommonSubstring(string s1,string s2){
+    int len1=s1.length();
+    int len2=s2.length();
+    int dp[len1+1][len2+1];
+    for(int i=0;i<len2+1;i++) dp[0][i]=0; //longestCommonSubstring=0 for len(s1)=0 and s2 of any len
+    for(int i=0;i<len1+1;i++) dp[i][0]=0; //longestCommonSubstring=0 for len(s2)=0 and s1 of any len
+    int ans=0;  //len of longest common substring is 0 if any char doesnt matches
+    int index; //to store ending indexes of lcs in s1
+    //s1 in rows  s2 in columns
+    for(int i=1;i<len1+1;i++){
+        for(int j=1;j<len2+1;j++){
+            if(s1[i-1]==s2[j-1]){    //i-1 and j-1 used instead of i and j bcoz loop starts from 1 not 0
+                dp[i][j]=1+dp[i-1][j-1];
+                if(ans<dp[i][j]){
+                    ans=dp[i][j];
+                    index=i-1;
+                }
+            }
+            else dp[i][j]=0;
+        }
+    }
+    //resultant longestCommonSubstringsubstring
+    string res="";
+    int i=ans;
+    while(i--){
+        res=s1[index--]+res;
+    }
+    cout<<"longest common substring is : "<<res<<endl;
+    cout<<ans<<endl;
+    
+    return ans;
+}
+
+int main() {
+	string s1,s2;
+	cin>>s1>>s2;
+	longestCommonSubstring(s1,s2);
+	return 0;
+}
+
+Input:
+abcdgh
+acdghr
+
+output:
+longest common substring is : cdgh
+4
