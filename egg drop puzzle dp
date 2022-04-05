@@ -1,0 +1,98 @@
+Problem : problem with ‘n’ eggs and ‘k’ floors.
+Here we have to find the min no of attempts to find critical floor (floor on and above that if egg drops it will broke)  
+
+Method 1 : Memoization  DP
+The solution is to try dropping an egg from every floor(from 1 to k) 
+and recursively calculate the minimum number of droppings needed in the worst case. 
+The floor which gives the minimum value in the worst case is going to be part of the solution. 
+
+Meaning of a worst-case scenario: Worst case scenario gives the user the surety of the threshold floor. 
+For example- If we have ‘1’ egg and ‘k’ floors, we will start dropping the egg from the first floor till the egg breaks suppose on the ‘kth’ floor 
+so the number of tries to give us surety is ‘k’. 
+
+Optimal Substructure: 
+When we drop an egg from a floor x, there can be two cases 
+(1) The egg breaks  -  If the egg breaks after dropping from ‘xth’ floor, then we only need to check for floors lower than ‘x’ with remaining eggs 
+as some floor should exist lower than ‘x’ in which egg would not break;  
+              so the problem reduces to x-1 floors and n-1 eggs. 
+(2) The egg doesn’t break.  -  If the egg doesn’t break after dropping from the ‘xth’ floor, then we only need to check for floors higher than ‘x’; 
+so the problem reduces to ‘k-x’ floors and n eggs.
+Since we need to minimize the number of trials in worst case, we take the maximum of two cases. We consider the max of above two cases for every floor 
+and choose the floor which yields minimum number of trials. 
+
+so we return the min of max(case1,case2)\
+
+Memoization method : 
+#include <bits/stdc++.h>
+using namespace std;
+
+int minAttempts(int eggs,int floors,vector<vector<int>> &dp){
+    //base case e=0   attempts= -1   e=1  attempts=floors
+    //base case f=0   attempts=0     f=1  attempts=1
+    if(floors==0) return 0;
+    if(eggs==1) return floors;
+    if(floors==1) return 1;
+    if(dp[eggs][floors]!=-1) return dp[eggs][floors];
+    int minOfMax=INT_MAX;
+    for(int f=1;f<=floors;f++){
+        int maxx=max(minAttempts(eggs-1,f-1,dp),minAttempts(eggs,floors-f,dp));
+        minOfMax=min(minOfMax,maxx);
+    }
+    dp[eggs][floors]=1+minOfMax;
+    return 1+minOfMax;
+}
+
+int main() {
+	int eggs,floors;
+	cin>>eggs>>floors;
+	vector<vector<int>> dp(eggs+1,vector<int> (floors+1,-1));
+	cout<<minAttempts(eggs,floors,dp);
+	return 0;
+}
+
+
+input:
+2 36
+output:
+8
+
+
+Tabulation method : 
+#include <bits/stdc++.h>
+using namespace std;
+
+int minAttempts(int eggs,int floors){
+    int dp[eggs+1][floors+1];
+    //base case e=0   attempts= -1   e=1  attempts=floors
+    //base case f=0   attempts=0     f=1  attempts=1
+    for(int e=1;e<eggs+1;e++){
+        for(int f=1;f<floors+1;f++){
+            if(e==1) dp[e][f]=f;
+            else if(f==1) dp[e][f]=1;
+            else {
+                int minOfMAx=INT_MAX;
+                for(int mf=f-1,pf=0;mf>=0;mf--,pf++){
+                    int survive=dp[e][mf];   
+                    int broken=dp[e-1][pf]; 
+                    int maxx=max(survive,broken);
+                    minOfMAx=min(minOfMAx,maxx);
+                }
+                dp[e][f]=1+minOfMAx;
+            }    
+        }
+    }
+    return dp[eggs][floors];
+}
+
+int main() {
+	int eggs,floors;
+	cin>>eggs>>floors;
+	cout<<minAttempts(eggs,floors);
+	return 0;
+}
+
+
+input:
+2 10
+output:
+4
